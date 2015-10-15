@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/abhatia/Qt Projects/EasyDraw/database-src/dbcreate.cpp
+iostream
+-
+stdio.h
+-
+sstream
+-
+cstdio
+-
+opencv2/opencv.hpp
+-
+opencv2/xfeatures2d.hpp
+/home/abhatia/Qt Projects/EasyDraw/database-src/opencv2/xfeatures2d.hpp
+opencv2/highgui/highgui.hpp
+/home/abhatia/Qt Projects/EasyDraw/database-src/opencv2/highgui/highgui.hpp
+opencv2/core/core.hpp
+/home/abhatia/Qt Projects/EasyDraw/database-src/opencv2/core/core.hpp
+dirent.h
+-
+fstream
+-
+

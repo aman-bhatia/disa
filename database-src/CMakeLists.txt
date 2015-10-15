@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project( db )
+find_package( OpenCV REQUIRED )
+add_executable(db dbcreate.cpp)
+target_link_libraries( db ${OpenCV_LIBS})

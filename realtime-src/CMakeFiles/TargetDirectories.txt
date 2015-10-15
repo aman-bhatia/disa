@@ -1,0 +1,1 @@
+/home/abhatia/Qt Projects/EasyDraw/realtime-src/CMakeFiles/r.dir
