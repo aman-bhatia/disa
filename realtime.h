@@ -1,29 +1,33 @@
 #ifndef REALTIME_H
 #define REALTIME_H
 
-#include <stdio.h>
-#include <iostream>
-#include "opencv2/core/core.hpp"
-#include "opencv2/highgui/highgui.hpp"
 #include "opencv2/xfeatures2d.hpp"
+#include <stdio.h>
 #include <fstream>
 #include <vector>
 #include <pthread.h>
-#include "getinput.h"
 #include <sstream>
+#include "getinput.h"
+
 using namespace cv;
 using namespace std;
 extern int numbergreater;
 extern long ret;
-extern vector<string> sq;
-extern vector<Mat> db;
-extern Mat descriptor;
-extern int ranks[20];
-extern int numbers[20];
+
+struct match {
+    string name;
+    vector<Point> contours;
+    float distance;
+};
+
+struct by_distance {
+    bool operator()(match const &a, match const &b) {
+        return a.distance < b.distance;
+    }
+};
 
 extern Mat previmg;
-int matchrank(Mat* descriptors_1 , Mat* descriptors_2);
-void rankall();
+extern vector<match> images;
 void suggestions(string category);
 void *run(void*);
 #endif // REALTIME_H

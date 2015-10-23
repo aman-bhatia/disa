@@ -1,5 +1,0 @@
-cmake_minimum_required(VERSION 2.8)
-project( r )
-find_package( OpenCV REQUIRED )
-add_executable(r realtime.cpp getinput.cpp ia.cpp)
-target_link_libraries( r  ${OpenCV_LIBS} -pthread)

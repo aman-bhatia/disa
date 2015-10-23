@@ -1,3 +1,6 @@
+#ifndef GETINPUT_H
+#define GETINPUT_H
+
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
@@ -14,7 +17,6 @@ extern Mat layer0;
 extern Mat layer1;
 extern Mat img;
 extern Mat result;
-extern vector<string> sq;
 extern int sgstn_x, sgstn_y, sgstn_w, sgstn_h;
 extern string selected_sgstn;
 extern bool eraser_selected;
@@ -24,3 +26,5 @@ void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat 
 void draw_sgstn();
 void draw(int,int,int,int,void*);
 void *getimage(void *);
+
+#endif

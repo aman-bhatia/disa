@@ -1,1 +1,0 @@
-/home/abhatia/Qt Projects/EasyDraw/database-src/CMakeFiles/db.dir
