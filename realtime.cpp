@@ -17,38 +17,53 @@ using namespace cv;
 using namespace std;
 
 vector<match> images(0);
-Mat previmg = Mat(window_height, window_width, CV_8UC1, Scalar(0));
+Mat previmg = Mat(window_height, window_width, CV_8UC1, Scalar(255));
 
 cv::Ptr <cv::ShapeContextDistanceExtractor> mysc = cv::createShapeContextDistanceExtractor();
 
-vector<Point> simpleContour( const Mat& currentQuery, int n=100 )
-{
-    vector<vector<Point> > _contoursQuery;
-    vector <Point> contoursQuery;
-    findContours(currentQuery, _contoursQuery, RETR_LIST, CHAIN_APPROX_NONE);
-    for (size_t border=0; border<_contoursQuery.size(); border++)
-    {
-        for (size_t p=0; p<_contoursQuery[border].size(); p++)
-        {
-            contoursQuery.push_back( _contoursQuery[border][p] );
+vector<Point> getContours(Mat img){
+    vector<Vec4i> hierarchy;
+    vector<vector<Point> > contours;
+    findContours(img , contours , hierarchy , RETR_EXTERNAL , CV_CHAIN_APPROX_NONE);
+
+    int n=200;
+    vector<Point> cont(0);
+    for (int i=0;i<contours.size();i++){
+        for (int j=0;j<contours[i].size();j++){
+            cont.push_back(contours[i][j]);
         }
     }
-
-    // In case actual number of points is less than n
-    int dummy=0;
-    for (int add=contoursQuery.size()-1; add<n; add++)
-    {
-        contoursQuery.push_back(contoursQuery[dummy++]); //adding dummy values
+    while (cont.size() < n){
+        cont.push_back(cont.back());
     }
-
-    // Uniformly sampling
-    random_shuffle(contoursQuery.begin(), contoursQuery.end());
-    vector<Point> cont;
-    for (int i=0; i<n; i++)
-    {
-        cont.push_back(contoursQuery[i]);
+    random_shuffle(cont.begin(), cont.end());
+    vector<Point> ret(0);
+    for (int i=0;i<n;i++){
+        ret.push_back(cont[i]);
     }
-    return cont;
+    return ret;
+}
+
+float getDistance(vector<Point> &contours1, vector<Point> &contours2)
+{
+//    vector<float> distances;
+//    cout << "\t contours1.size() : " << contours1.size() << endl;
+//    cout << "\t contours2.size() : " << contours2.size() << endl;
+//    for(int i = 0 ; i < contours1.size() ; ++i)
+//    {
+//        for(int j = 0 ; j < contours2.size() ; ++j)
+//        {
+//            distances.push_back(mysc->computeDistance(contours1[i] , contours2[j]));
+//        }
+//    }
+//    sort(distances.begin() , distances.end());
+//    float to_return = 0;
+//    int limit = (10 < distances.size()) ? 10 : distances.size();
+//    for(int i = 0 ; i < limit ; ++i)
+//        to_return += distances[i];
+//    return to_return;
+
+    return mysc->computeDistance(contours1 , contours2);
 }
 
 void suggestions(string category)
@@ -57,7 +72,7 @@ void suggestions(string category)
 
     DIR *dir;
     dirent *entry;
-    string dirname = "../EasyDraw/sda/compressed/" + category + "/";
+    string dirname = "../EasyDraw/sda/" + category + "/";
     if ((dir = opendir (dirname.data())) != NULL) {
       while ((entry = readdir (dir)) != NULL) {
           string filename = entry->d_name;
@@ -69,7 +84,8 @@ void suggestions(string category)
                   cout << "Unable to open Image file : from suggestions function\n";
                   exit(0);
               }
-              m.contours = simpleContour(queryImg);
+              threshold(queryImg,queryImg,240,255,CV_THRESH_BINARY_INV);
+              m.contours = getContours(queryImg);
               m.distance = 0;
               images.push_back(m);
           }
@@ -80,27 +96,53 @@ void suggestions(string category)
       cout << "Cannot open the directory" << endl;
       exit(0);
     }
+    cout << "Done initializing" << endl;
 }
 
+bool sameImages(Mat& img1, Mat& img2){
+    if (img1.rows==img2.rows && img1.cols==img2.cols){
+        for (int i=0;i<img1.rows;i++){
+            for(int j=0;j<img1.cols;j++){
+                if (img1.at<uchar>(i,j) != img2.at<uchar>(i,j))
+                    return false;
+            }
+        }
+        return true;
+    } else return false;
+}
+
+void drawContour(vector<Point> cont, Mat img,string name){
+    Mat ret = img.clone();
+    for (int i=0;i<cont.size();i++){
+        circle(ret,cont[i],2,Scalar(255),-1);
+    }
+    imwrite("../EasyDraw/"+name,ret);
+}
 
 void *run(void *k){
     while(true){
-        Mat gray_img;
-        cv::cvtColor(img, gray_img, CV_BGR2GRAY);
-        cv::Mat diff;
-        cv::compare(previmg, gray_img, diff, cv::CMP_NE);
-        int nz = cv::countNonZero(diff);
-        if(nz != 0 && category_selected)
+        //Mat gray_img;
+        //cv::cvtColor(img, gray_img, CV_BGR2GRAY);
+        Mat gray_img = imread("../EasyDraw/Drawing.png",0);
+        threshold(gray_img,gray_img,127,255,CV_THRESH_BINARY_INV);
+        if(category_selected && !sameImages(gray_img,previmg))
         {
-            //qDebug() << "nz != 0 and its value is " << nz;
-            Mat resizedImg;
-            resize(gray_img,resizedImg,Size(100,100));
-            vector<Point> contImg = simpleContour(resizedImg);
+            cout << "I am running\n";
+            previmg = gray_img.clone();
+            vector<Point> contours_img = getContours(gray_img);
             for (int i=0;i<images.size();i++){
-                images[i].distance = mysc->computeDistance( images[i].contours, contImg );
+                cout << "\t images[i].name : " << images[i].name << endl;
+                images[i].distance = getDistance(images[i].contours, contours_img);
             }
             sort(images.begin(), images.end(), by_distance());
-            previmg = gray_img.clone();
+            for (int i=0;i<images.size();i++){
+                cout << images[i].name << " : " << images[i].distance << endl;
+            }
+            for (int i=0;i<images.size();i++){
+                Mat temp_img = imread("../EasyDraw/sda/"+images[i].name);
+                drawContour(images[i].contours,temp_img,"images"+to_string(i) + ".png");
+            }
+            cout << "\n\n";
         }
     }
 }

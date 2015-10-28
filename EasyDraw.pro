@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = EasyDraw
 TEMPLATE = app
 
-CONFIG += console
+CONFIG += console c++11
 
 INCLUDEPATH += /usr/local/include/opencv /usr/local/include/opencv2
 

@@ -284,6 +284,11 @@
        </item>
        <item>
         <property name="text">
+         <string>Cartoon</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Face</string>
         </property>
        </item>

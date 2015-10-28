@@ -11,8 +11,6 @@
 
 using namespace cv;
 using namespace std;
-extern int numbergreater;
-extern long ret;
 
 struct match {
     string name;

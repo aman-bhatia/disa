@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     layer1 = layer0.clone();
     while(true){
         if (category_selected){
-            string temp = "../EasyDraw/sda/original/";
+            string temp = "../EasyDraw/sda/";
             w.addToLabel(1,temp+images[0].name);
             w.addToLabel(2,temp+images[1].name);
             w.addToLabel(3,temp+images[2].name);
@@ -52,8 +52,9 @@ int main(int argc, char *argv[])
         imshow(window_name, toshow);
         if (waitKey(1) == 27) break;
     }
-
-    imwrite("../EasyDraw/Drawing.png", img);
+    Mat gray_img;
+    cv::cvtColor(img, gray_img, CV_BGR2GRAY);
+    imwrite("../EasyDraw/Drawing.png", gray_img);
     destroyAllWindows();
 
     return a.exec();
