@@ -96,7 +96,8 @@ void MainWindow::on_pushButton_4_toggled(bool checked)
 // Choose Category
 void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 {
-    if (arg1 == "Choose Category") category_selected = false;
+    category_selected = false;
+    if (arg1 == "Choose Category") return;
     else {
         cout<<arg1.toStdString()<<endl;
         suggestions(arg1.toStdString());

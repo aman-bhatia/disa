@@ -231,6 +231,12 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+        <property name="default">
+         <bool>false</bool>
+        </property>
         <property name="flat">
          <bool>true</bool>
         </property>
@@ -269,42 +275,17 @@
        </item>
        <item>
         <property name="text">
-         <string>Anime</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Automobile</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Birds</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>Cartoon</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Face</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Food</string>
+         <string>Dresses</string>
         </property>
        </item>
        <item>
         <property name="text">
          <string>Furniture</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nature</string>
         </property>
        </item>
       </widget>

@@ -33,37 +33,18 @@ vector<Point> getContours(Mat img){
             cont.push_back(contours[i][j]);
         }
     }
+    vector<Point> ret(0);
+    if (cont.size() == 0)
+        return ret;
+
     while (cont.size() < n){
         cont.push_back(cont.back());
     }
     random_shuffle(cont.begin(), cont.end());
-    vector<Point> ret(0);
     for (int i=0;i<n;i++){
         ret.push_back(cont[i]);
     }
     return ret;
-}
-
-float getDistance(vector<Point> &contours1, vector<Point> &contours2)
-{
-//    vector<float> distances;
-//    cout << "\t contours1.size() : " << contours1.size() << endl;
-//    cout << "\t contours2.size() : " << contours2.size() << endl;
-//    for(int i = 0 ; i < contours1.size() ; ++i)
-//    {
-//        for(int j = 0 ; j < contours2.size() ; ++j)
-//        {
-//            distances.push_back(mysc->computeDistance(contours1[i] , contours2[j]));
-//        }
-//    }
-//    sort(distances.begin() , distances.end());
-//    float to_return = 0;
-//    int limit = (10 < distances.size()) ? 10 : distances.size();
-//    for(int i = 0 ; i < limit ; ++i)
-//        to_return += distances[i];
-//    return to_return;
-
-    return mysc->computeDistance(contours1 , contours2);
 }
 
 void suggestions(string category)
@@ -92,10 +73,14 @@ void suggestions(string category)
       }
       closedir (dir);
     } else {
-      // could not open directory
       cout << "Cannot open the directory" << endl;
       exit(0);
     }
+
+    Mat gray_img;
+    cv::cvtColor(img, gray_img, CV_BGR2GRAY);
+    threshold(gray_img,gray_img,127,255,CV_THRESH_BINARY_INV);
+    previmg = gray_img.clone();
     cout << "Done initializing" << endl;
 }
 
@@ -111,6 +96,12 @@ bool sameImages(Mat& img1, Mat& img2){
     } else return false;
 }
 
+float getDistance(vector<Point> cont1, vector<Point> cont2){
+    if (cont1.size()==0 || cont2.size()==0)
+        return 0;
+    return mysc->computeDistance(cont1,cont2);
+}
+
 void drawContour(vector<Point> cont, Mat img,string name){
     Mat ret = img.clone();
     for (int i=0;i<cont.size();i++){
@@ -121,28 +112,28 @@ void drawContour(vector<Point> cont, Mat img,string name){
 
 void *run(void *k){
     while(true){
-        //Mat gray_img;
-        //cv::cvtColor(img, gray_img, CV_BGR2GRAY);
-        Mat gray_img = imread("../EasyDraw/Drawing.png",0);
+        Mat gray_img;
+        cv::cvtColor(img, gray_img, CV_BGR2GRAY);
+        //Mat gray_img = imread("../EasyDraw/Drawing.png",0);
         threshold(gray_img,gray_img,127,255,CV_THRESH_BINARY_INV);
         if(category_selected && !sameImages(gray_img,previmg))
         {
-            cout << "I am running\n";
+            qDebug() << "Processing Images...";
             previmg = gray_img.clone();
             vector<Point> contours_img = getContours(gray_img);
             for (int i=0;i<images.size();i++){
-                cout << "\t images[i].name : " << images[i].name << endl;
                 images[i].distance = getDistance(images[i].contours, contours_img);
             }
             sort(images.begin(), images.end(), by_distance());
-            for (int i=0;i<images.size();i++){
-                cout << images[i].name << " : " << images[i].distance << endl;
-            }
-            for (int i=0;i<images.size();i++){
-                Mat temp_img = imread("../EasyDraw/sda/"+images[i].name);
-                drawContour(images[i].contours,temp_img,"images"+to_string(i) + ".png");
-            }
-            cout << "\n\n";
+//            for (int i=0;i<images.size();i++){
+//                cout << images[i].name << " : " << images[i].distance << endl;
+//            }
+//            drawContour(contours_img,gray_img,"gray_img.png");
+//            for (int i=0;i<images.size();i++){
+//                Mat temp_img = imread("../EasyDraw/sda/"+images[i].name);
+//                drawContour(images[i].contours,temp_img,"images"+to_string(i) + ".png");
+//            }
+            qDebug() << "Processing Completed...";
         }
     }
 }

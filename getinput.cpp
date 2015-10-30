@@ -6,7 +6,7 @@ int window_height = 800;
 
 bool left_button_down = false; //true if mouse is pressed
 bool right_button_down = false; //true if mouse is pressed
-int line_thickness = 2;
+int line_thickness = 4;
 Mat layer0;                                                         // backgroung image
 Mat layer1;                                                         // suggestion added to background
 Mat img;                                                            // Image on which user draws

@@ -6,13 +6,24 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/core.hpp>
 #include <iostream>
+#include <QSplashScreen>
+#include <QTimer>
 
 using namespace cv;
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
+
+    QSplashScreen *splash = new QSplashScreen;
+    splash->setPixmap(QPixmap("../EasyDraw/images/screen.jpg"));
+    splash->show();
+    QApplication::processEvents();
+    sleep(5);
+    QTimer::singleShot(0,splash,SLOT(close()));
+
     MainWindow w;
     w.setWindowTitle(QString::fromUtf8("Suggestions"));
     w.resize(300, 750);
