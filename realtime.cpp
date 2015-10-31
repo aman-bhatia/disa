@@ -53,7 +53,7 @@ void suggestions(string category)
 
     DIR *dir;
     dirent *entry;
-    string dirname = "../EasyDraw/sda/" + category + "/";
+    string dirname = "../sda/" + category + "/";
     if ((dir = opendir (dirname.data())) != NULL) {
       while ((entry = readdir (dir)) != NULL) {
           string filename = entry->d_name;
@@ -107,14 +107,14 @@ void drawContour(vector<Point> cont, Mat img,string name){
     for (int i=0;i<cont.size();i++){
         circle(ret,cont[i],2,Scalar(255),-1);
     }
-    imwrite("../EasyDraw/"+name,ret);
+    imwrite("../"+name,ret);
 }
 
 void *run(void *k){
     while(true){
         Mat gray_img;
         cv::cvtColor(img, gray_img, CV_BGR2GRAY);
-        //Mat gray_img = imread("../EasyDraw/Drawing.png",0);
+        //Mat gray_img = imread("../Drawing.png",0);
         threshold(gray_img,gray_img,127,255,CV_THRESH_BINARY_INV);
         if(category_selected && !sameImages(gray_img,previmg))
         {
@@ -130,7 +130,7 @@ void *run(void *k){
 //            }
 //            drawContour(contours_img,gray_img,"gray_img.png");
 //            for (int i=0;i<images.size();i++){
-//                Mat temp_img = imread("../EasyDraw/sda/"+images[i].name);
+//                Mat temp_img = imread("../sda/"+images[i].name);
 //                drawContour(images[i].contours,temp_img,"images"+to_string(i) + ".png");
 //            }
             qDebug() << "Processing Completed...";

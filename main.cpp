@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QSplashScreen *splash = new QSplashScreen;
-    splash->setPixmap(QPixmap("../EasyDraw/images/screen.jpg"));
+    splash->setPixmap(QPixmap("../images/screen.jpg"));
     splash->show();
     QApplication::processEvents();
     sleep(5);
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     qDebug() << "Starting Program";
     layer0 = Mat(window_height, window_width, CV_8UC1, Scalar(255));
     img = Mat(window_height, window_width, CV_8UC4, Scalar(255,255,255,0));
-    namedWindow( window_name, CV_WINDOW_OPENGL | CV_WINDOW_AUTOSIZE);		// Create a window for display.
+    namedWindow( window_name, CV_WINDOW_AUTOSIZE);		// Create a window for display.
     setMouseCallback(window_name, draw, NULL);                              //set the callback function for any mouse event
 
     pthread_t t;
@@ -47,13 +47,13 @@ int main(int argc, char *argv[])
     layer1 = layer0.clone();
     while(true){
         if (category_selected){
-            string temp = "../EasyDraw/sda/";
+            string temp = "../sda/";
             w.addToLabel(1,temp+images[0].name);
             w.addToLabel(2,temp+images[1].name);
             w.addToLabel(3,temp+images[2].name);
             w.addToLabel(4,temp+images[3].name);
         } else {
-            string temp = "../EasyDraw/images/select_category.png";
+            string temp = "../images/select_category.png";
             w.addToLabel(1,temp);
             w.addToLabel(2,temp);
             w.addToLabel(3,temp);
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     }
     Mat gray_img;
     cv::cvtColor(img, gray_img, CV_BGR2GRAY);
-    imwrite("../EasyDraw/Drawing.png", gray_img);
+    imwrite("../Drawing.png", gray_img);
     destroyAllWindows();
 
     return a.exec();

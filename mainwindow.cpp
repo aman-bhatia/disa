@@ -39,20 +39,20 @@ void MainWindow::addToLabel(int id, std::string fname){
 }
 
 void MainWindow::uncheck_all_pushButtons(){
-    ui->pushButton->setIcon(QIcon("../EasyDraw/images/cross.png"));
-    ui->pushButton_2->setIcon(QIcon("../EasyDraw/images/cross.png"));
-    ui->pushButton_3->setIcon(QIcon("../EasyDraw/images/cross.png"));
-    ui->pushButton_4->setIcon(QIcon("../EasyDraw/images/cross.png"));
+    ui->pushButton->setIcon(QIcon("../images/cross.png"));
+    ui->pushButton_2->setIcon(QIcon("../images/cross.png"));
+    ui->pushButton_3->setIcon(QIcon("../images/cross.png"));
+    ui->pushButton_4->setIcon(QIcon("../images/cross.png"));
 }
 
 void MainWindow::on_pushButton_toggled(bool checked)
 {
     uncheck_all_pushButtons();
     if (checked){
-        ui->pushButton->setIcon(QIcon("../EasyDraw/images/tick.png"));
-        selected_sgstn = "../EasyDraw/sda/"+images[0].name;
+        ui->pushButton->setIcon(QIcon("../images/tick.png"));
+        selected_sgstn = "../sda/"+images[0].name;
     } else {
-        ui->pushButton->setIcon(QIcon("../EasyDraw/images/cross.png"));
+        ui->pushButton->setIcon(QIcon("../images/cross.png"));
         selected_sgstn = "";
     }
 }
@@ -61,10 +61,10 @@ void MainWindow::on_pushButton_2_toggled(bool checked)
 {
     uncheck_all_pushButtons();
     if (checked){
-        ui->pushButton_2->setIcon(QIcon("../EasyDraw/images/tick.png"));
-        selected_sgstn = "../EasyDraw/sda/"+images[1].name;
+        ui->pushButton_2->setIcon(QIcon("../images/tick.png"));
+        selected_sgstn = "../sda/"+images[1].name;
     } else {
-        ui->pushButton_2->setIcon(QIcon("../EasyDraw/images/cross.png"));
+        ui->pushButton_2->setIcon(QIcon("../images/cross.png"));
         selected_sgstn = "";
     }
 }
@@ -73,10 +73,10 @@ void MainWindow::on_pushButton_3_toggled(bool checked)
 {
     uncheck_all_pushButtons();
     if (checked){
-        ui->pushButton_3->setIcon(QIcon("../EasyDraw/images/tick.png"));
-        selected_sgstn = "../EasyDraw/sda/"+images[2].name;
+        ui->pushButton_3->setIcon(QIcon("../images/tick.png"));
+        selected_sgstn = "../sda/"+images[2].name;
     } else {
-        ui->pushButton_3->setIcon(QIcon("../EasyDraw/images/cross.png"));
+        ui->pushButton_3->setIcon(QIcon("../images/cross.png"));
         selected_sgstn = "";
     }
 }
@@ -85,10 +85,10 @@ void MainWindow::on_pushButton_4_toggled(bool checked)
 {
     uncheck_all_pushButtons();
     if (checked){
-        ui->pushButton_4->setIcon(QIcon("../EasyDraw/images/tick.png"));
-        selected_sgstn = "../EasyDraw/sda/"+images[3].name;
+        ui->pushButton_4->setIcon(QIcon("../images/tick.png"));
+        selected_sgstn = "../sda/"+images[3].name;
     } else {
-        ui->pushButton_4->setIcon(QIcon("../EasyDraw/images/cross.png"));
+        ui->pushButton_4->setIcon(QIcon("../images/cross.png"));
         selected_sgstn = "";
     }
 }
@@ -120,7 +120,8 @@ void MainWindow::on_checkBox_toggled(bool checked)
 {
     if (checked){
         eraser_selected = true;
-        QApplication::setOverrideCursor(QCursor(QPixmap("../EasyDraw/images/eraser.png")));
+        QApplication::setOverrideCursor(QCursor(QPixmap("../EasyDraw/"
+                                                        "images/eraser.png")));
     } else {
         eraser_selected = false;
         QApplication::restoreOverrideCursor();
